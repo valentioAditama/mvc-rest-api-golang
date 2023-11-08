@@ -9,9 +9,21 @@ import (
 
 func read(c echo.Context) error {
 	db := c.Get("db").(*gorm.DB)
-	var items []models.Blog
-	db.Find(&items)
-	return c.JSON(http.StatusOK, items)
+	var blog []models.Blog
+	db.Find(&blog)
+	return c.JSON(http.StatusOK, blog)
+}
+
+func find(c echo.Context) error {
+	db := c.Get("db").(*gorm.DB)
+	id := c.Param("id")
+	var blog models.Blog
+
+	if err := db.First(&blog, id).Error; err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": "Record Not Found"})
+	}
+
+	return c.JSON(http.StatusOK, blog)
 }
 
 func create(c echo.Context) error {
