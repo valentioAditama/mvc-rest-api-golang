@@ -1,14 +1,13 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"time"
 )
 
 type User struct {
-	gorm.Model
-	Name      string
+	ID        uint   `gorm:"primarykey"`
+	Name      string `json:"name" validate:"required"`
 	CreatedAt time.Time
-	UpdateAt  time.Time
-	blog      []Blog `gorm:"many2many:blog_users"`
+	UpdatedAt time.Time
+	Blogs     []*Blog `gorm:"many2many:blog_users;" json:"blogs"`
 }

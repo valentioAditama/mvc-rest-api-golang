@@ -1,14 +1,11 @@
 package models
 
-import (
-	"gorm.io/gorm"
-	"time"
-)
+import "time"
 
 type Category struct {
-	gorm.Model
-	Name      string
-	Blogs     []Blog `gorm:"many2many:blog_categories"`
+	ID        uint   `gorm:"primarykey"`
+	Name      string `json:"name" validate:"required"`
 	CreatedAt time.Time
-	UpdateAt  time.Time
+	UpdatedAt time.Time
+	Blogs     []Blog `gorm:"many2many:blog_categories"`
 }
