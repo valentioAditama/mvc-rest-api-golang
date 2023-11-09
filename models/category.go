@@ -7,5 +7,5 @@ type Category struct {
 	Category  string `json:"category" validate:"required"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Blogs     []Blog `gorm:"many2many:blog_categories"`
+	Blogs     []Blog `gorm:"many2many:blog_categories;" json:"blogs"`
 }

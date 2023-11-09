@@ -7,5 +7,5 @@ type Image struct {
 	Path      string `json:"path" validate:"required"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	Blogs     []Blog `gorm:"many2many:blog_images"`
+	Blogs     []Blog `gorm:"many2many:blog_images;" json:"blogs"`
 }
