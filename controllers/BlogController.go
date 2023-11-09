@@ -80,11 +80,6 @@ func Create(c echo.Context) error {
 	db.Create(&data.user)
 	db.Create(&data.image)
 
-	// append the category to the blog categories
-	db.Model(&data.blog).Association("categories").Append(&data.category)
-	db.Model(&data.blog).Association("images").Append(&data.image)
-	db.Model(&data.blog).Association("users").Append(&data.user)
-
 	// process the form data as needed
 	response := helper.APICreatedResponse{
 		Status: "Created",
