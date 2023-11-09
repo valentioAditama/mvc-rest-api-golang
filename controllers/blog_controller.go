@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/labstack/echo/v4"
 	"go-rest-api/helper"
 	"go-rest-api/models"
@@ -58,6 +59,7 @@ func Create(c echo.Context) error {
 		return err
 	}
 
+	// create an instance of the user struct
 	var data struct {
 		blog     models.Blog
 		category models.Category
@@ -65,16 +67,30 @@ func Create(c echo.Context) error {
 		image    models.Image
 	}
 
-	if err := c.Bind(&data); err != nil {
-		return c.JSON(http.StatusBadRequest, err.Error())
+	// Retrieve form values from the request body
+	data.blog.Title = c.FormValue("title")
+	data.blog.Content = c.FormValue("content")
+	data.category.Category = c.FormValue("category")
+	data.user.Name = c.FormValue("name")
+	data.image.Path = c.FormValue("path")
+
+	// store to database
+	db.Create(&data)
+
+	// process the form data as needed
+	response := helper.APICreatedResponse{
+		Status: "Created",
+		Code:   http.StatusCreated,
 	}
 
-	db.Create(&data.blog)
-	db.Create(&data.category)
-	db.Create(&data.user)
-	db.Create(&data.image)
+	// marshal the response to JSON
+	responseJSON, err := json.Marshal(response)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
 
-	return c.JSON(http.StatusCreated, data)
+	// return a response
+	return c.JSONBlob(http.StatusOK, responseJSON)
 }
 
 func Update(c echo.Context) error {
